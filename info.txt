@@ -1,0 +1,37 @@
+- main.js
+: init.js로 app.vue 초기화,  router/index.js 파일로 라우터 
+
+- init.js
+: common/lib 공통 저장소 처리, src/bootstrap.js 초기 공통 처리, common/lib.js 공통 함수
+
+- bootstrap.js
+: 초기 공통 처리
+
+- App.vue
+: 헤드 라우터링크 설정
+
+- common/lib.js
+: (라이브러리 설정) : form 데이터 입력시 처리 -> json 형태로 받음
+(axios_FormData 데이터가 Formdata 일때 제이슨파일로 받는다)
+
+- store.js
+: 저장소 설정 -> 서버(KanbanServer)로 member 데이터 저장
+
+- components/PageTitle.vue
+: 페이지타이틀 components 설정 <PageTitle>
+
+- components/member/form.vue
+: 회원가입 페이지: form, messagepopup (알림창) 설정, 모드가 JOIN일때 가입 아닐때 정보수정,
+
+- models/member.js
+: 회원 가입처리, 수정처리
+
+- router/index.js
+: 라우팅 설정
+
+- views/main.vue
+: 메인페이지 
+
+-views/join.vue
+: 회원가입 => 모드 조인 으로  member/form.vue 컴포넌트하여 구현
+
