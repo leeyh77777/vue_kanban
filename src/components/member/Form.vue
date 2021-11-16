@@ -2,7 +2,7 @@
 <form ref="frmMember" method="post" autocomplete='off' @submit="formSubmit($event)">
     <input type="hidden" name="mode" :value="mode">
     <input type="text" name="memId" placeholder='아이디' :value="member.memId" v-if="mode == 'join'">
-    <div v-else>아이디 : {{ member.memId }}</div>
+    <div v-else class='stit'>아이디 : {{ member.memId }}</div>
     <br>          
     <input type="password" name="memPw" placeholder='비밀번호'><br>        
     <input type="password" name="memPwRe" placeholder='비밀번호확인'><br>
@@ -11,7 +11,7 @@
     <input type="submit" value="가입하기" v-if="mode == 'join'">
     <input type="submit" value="수정하기" v-else>
 </form>
-<MessagePopup />
+<MessagePopup ref='message_popup' :message="message" />
 </template>
 <script>
 import member from "../../models/member.js"
@@ -19,6 +19,12 @@ import MessagePopup from "../../components/common/Message.vue"
 export default {
     mixins : [member],
     components : {MessagePopup},
+    data() {
+        return {
+            isHide : true,
+            message : "",
+        };
+    },
     props : {
         mode : {
             type : String,
@@ -36,14 +42,31 @@ export default {
         }
     },
     methods : {
-        formSubmit(e) {
+        async formSubmit(e) {
             e.preventDefault();
             const formData = new FormData(this.$refs.frmMember);
+            let result = {};
             if (this.mode == 'join') {  // 회원 가입 
-                this.$join(formData);
+                result = await this.$join(formData);
+                if (result.success) {
+                    this.$router.push({ path : '/login'});
+                }
             } else { // 회원 정보 수정
-                this.$update(formData);
+                result = await this.$update(formData);
+                if (result.success) {
+                    const frm = this.$refs.frmMember;
+                    frm.memPw.value = "";
+                    frm.memPwRe.value = "";
+                }
             }
+            if (result.message) {
+                this.showMessage(result.message);
+                
+            }
+        },
+        showMessage(message) {
+            this.$refs.message_popup.isHide = false;
+            this.message = message;
         }
     }
 }
